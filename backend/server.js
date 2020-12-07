@@ -20,13 +20,17 @@ const db = mysql.createConnection({
 });
 
 
-app.post('/create', (req,res) => {
-    console.log(res.body)
+app.get("/" , (req,res) => {});
+
+
+
+app.post("/api/create", (req , res) => {
+
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
 
-    db.query('INSERT INTO users (name, email, password) VALUES (?,?,?),' [name, email, password],
+    db.query('INSERT INTO users (name, email, password) VALUES (?,?,?)', [name, email, password],
         (err, result) => {
         if (err) {
             console.log(err)
@@ -52,6 +56,8 @@ app.use('/' , (req,res) => {
     res.send("<h1> Home Page</h1>");
 })
 
-app.listen(3001, () => {
-    console.log("Server started on Port 8112")
+const PORT = 3001;
+
+app.listen(PORT, () => {
+    console.log("Server started on Port 3001")
 })
