@@ -36,6 +36,7 @@
     ]
   },
   "devDependencies": {
-    "react-particles-js": "^3.4.1"
+    "react-particles-js": "^3.4.1",
+    "typed.js": "^2.0.11"
   }
 }

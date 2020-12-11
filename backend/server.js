@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
+var jwt = require('jsonwebtoken');
 
 /*
 
@@ -69,27 +70,93 @@ app.post("/register", async (req , res) => {
     );
 })
 
+const verifyJWT = (req, res, next) => {
+    const  token = req.headers["x-access-token"]
+    if (!token) {
+        res.send("Yo, we need a token, please give it to us next")
+    } else {
+        jwt.verify(token, process.env.JWTSecret_Key , (err, user) => {
+            if (err)  return res.sendStatus(403)
+            req.user = user;
+            next()
+
+        })
+    }
+}
+
+app.get('/isUserAuth' , verifyJWT ,  (req,res) => {
+    res.send("Yo, u are authenticated")
+})
+
+app.get("/login", (req,res) => {
+    if (req.session.user) {
+        res.send({ loggedIn: true, user: req.session.user })
+    } else {
+        res.send({loggedIn: false})
+    }
+})
+
 app.post("/login", async (req , res) => {
-    try {
-    const {email, password} = req.body;
-    const user = await db.query(`SELECT * FROM users WHERE email = ${mysql.escape(email)}`, [email] , async (err, result) => {
+
+    const email = req.body.email;
+    const password = req.body.password;
+         db.query(`SELECT * FROM users WHERE email = ?;`, email , async (err, result) => {
+         if (err){
+             console.log({ err: err });
+         }
+            await bcrypt.compare(password, result[0].password, (err, response) => {
+                if (response){
+                    try {
+                        const id = result[0].id
+                        const token = jwt.sign({id}, process.env.JWTSecret_Key, {
+                            expiresIn: 300,
+                        })
+                        req.user = result;
+                        res.json({
+                            auth: true,
+                            token: token,
+                            result: result
+                        });
+                    } catch (e) {
+                        console.log(e)
+                    }
+                } else {
+                    res.json({
+                        auth: false,
+                        message: "Wrong username/password combination"
+                    });
+                }
+        })
+}
+)
+
+
+        /*
+
         if (result){
-            console.log(result)
-            const validPass = await bcrypt.compare(password, user.hash) // fix this
-            if (validPass){
-                res.status(200).json('Valid Email and Pass!');
-            } else{
-                res.json('Wrong pass')
+            let resultArray = Object.values(JSON.parse(JSON.stringify(result)))
+            for (const elem of resultArray){
+                var hashedPassword =  elem.password
             }
+            await bcrypt.compare(password, hashedPassword, (err, res) => {
+                if (res === true){
+                    console.log("Access granted")
+
+                    const id = res
+
+                } else{
+                    console.log("Access denied")
+                }
+            });
+
         } else{
             res.status(404).json("User not found!");
         }
     })
+         */
 
 
-    } catch (e) {
-        console.log(e)
-    }
+
 })
 
 app.post("/", (req , res) => {
@@ -116,8 +183,8 @@ app.use('/' , (req,res) => {
     res.send("<h1> Home Page</h1>");
 })
 
-const PORT = 3001;
+const PORT = 3007;
 
 app.listen(PORT, () => {
-    console.log("Server started on Port 3001")
+    console.log("Server started on Port 3007")
 })
