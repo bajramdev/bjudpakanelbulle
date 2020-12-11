@@ -1,54 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route} from "react-router-dom";
 import ReactDOM from 'react-dom';
-import './App.css';
-import {Button, TextField} from '@material-ui/core';
 import Particles from 'react-particles-js';
+import Typed from 'typed.js';
+import Instruction from './components/typed.component'
+import Axios from "axios";
+import Register from "./components/Register.components/register.component";
+import Login from "./components/Login.components/login.component";
 
 
 function App() {
-  return (
-    <div className="App">
-     <h1>Logga in</h1>
-        <Particles
-            params={{
-                "particles": {
-                    "line_linked": {
-                        "color":"#FFFFFF"
-                    },
-                    "number": {
-                        "value": 150
-                    },
-                    "size": {
-                        "value": 5
-                    }
-                },
-                "interactivity": {
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "repulse"
-                        }
-                    }
-                }
-            }}
-            style={{
-                width: '100%',
-                background: `rgb(78,255,0)`
-            }}
-        />
 
-        <div>
-
-        <form className="classes.root" noValidate autoComplete="off">
-           <div > <TextField className="diva"   id="standard-basic" label="Name" /> </div>
-            <div> <TextField className="diva"   id="standard-basic" label="Email" /> </div>
-            <div> <TextField className="diva"   id="standard-basic" label="Password" /> </div>
-        </form>
-        <Button variant="contained" color="primary">
-            Submit
-        </Button>
-        </div>
+    return (
+<Router>
+    <div className="container">
+        <Register/>
+        <Login/>
     </div>
+</Router>
   );
 }
 

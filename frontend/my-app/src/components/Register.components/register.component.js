@@ -1,13 +1,87 @@
-import React, {useEffect} from 'react';
-import Axios from 'axios'
+import React, { Component } from 'react';
+import axios from 'axios';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from "react-router-dom";
+import {Button, TextField} from '@material-ui/core';
 
 
-const submitButton = () => {
-    Axios.post('http://localhost:1111/register', {
-        name: name,
-        email: email,
-        password: password
-    }).then(() => {
-        console.log("Success!")
-    })
-};
+export default class Register extends Component {
+    constructor(props) {
+        super(props);
+
+        this.onChangeName = this.onChangeName.bind(this)
+        this.onChangeEmail = this.onChangeEmail.bind(this);
+        this.onChangePassword = this.onChangePassword.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+
+        this.state = {
+            name: '',
+            email: '',
+            password: ''
+        }
+    }
+
+
+    onChangeName(event) {
+        this.setState({
+            name: event.target.value
+        });
+        console.log(event.target.value)
+    }
+
+
+    onChangeEmail(event) {
+        this.setState({
+            email: event.target.value
+        });
+        console.log(event.target.value)
+    }
+
+
+    onChangePassword(event) {
+        this.setState({
+            password: event.target.value
+        });
+        console.log(event.target.value)
+    }
+
+    onSubmit(e){
+        e.preventDefault();
+
+        const userInfo = {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password
+        }
+
+        console.log(userInfo);
+
+        axios.post('http://localhost:3007/register' , userInfo)
+            .then(res => console.log(res.data));
+
+        console.log(e.target.value);
+
+    }
+
+
+    render() {
+
+        return(
+            <div>
+
+                <form className="Information" noValidate autoComplete="off">
+                          <TextField className="diva" id="standard-basic" value={this.state.name} onChange={this.onChangeName}  label="Name" />
+                    <br/> <TextField className="diva" id="standard-basic" value={this.state.email} onChange={this.onChangeEmail} label="Email" />
+                    <br/> <TextField className="diva" id="standard-basic" type="password" value={this.state.password} onChange={this.onChangePassword}  label="Password" />
+                </form>
+                <Button className="button" onClick={this.onSubmit} variant="contained" color="primary">
+                    Submit
+                </Button>
+            </div>
+
+        )
+
+    }
+
+
+}
