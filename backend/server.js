@@ -72,15 +72,27 @@ app.post("/register", async (req , res) => {
 app.post("/login", async (req , res) => {
     try {
     const {email, password} = req.body;
-    const user = await db.query(`SELECT * FROM users WHERE email = ${mysql.escape(email)}`, [email] , async (err, result) => {
+    console.log(password)
+
+        const user = await db.query(`SELECT * FROM users WHERE email = ${mysql.escape(email)}`, [email] , async (err, result) => {
         if (result){
-            console.log(result)
-            const validPass = await bcrypt.compare(password, user.hash) // fix this
-            if (validPass){
+            let resultArray = Object.values(JSON.parse(JSON.stringify(result)))
+            for (const elem of resultArray){
+                var hashedPassword =  elem.password
+            }
+            const validPass = await bcrypt.compare(password, hashedPassword, (err, res) => {
+                console.log("Inside callback : " + res)
+                console.log("Real Password: " + password)
+                console.log("hashed pw: " + hashedPassword)
+                console.log(validPass)
+
+            });
+            if (res){
                 res.status(200).json('Valid Email and Pass!');
             } else{
                 res.json('Wrong pass')
             }
+
         } else{
             res.status(404).json("User not found!");
         }
@@ -116,7 +128,7 @@ app.use('/' , (req,res) => {
     res.send("<h1> Home Page</h1>");
 })
 
-const PORT = 3001;
+const PORT = 1111;
 
 app.listen(PORT, () => {
     console.log("Server started on Port 3001")
