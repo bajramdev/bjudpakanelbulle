@@ -24,7 +24,7 @@ When user is done registering send email to them to verify email address
 
 
 
- */
+*/
 
 dotenv.config({ path: './.env' })
 
@@ -46,8 +46,6 @@ app.use(bodyParser.json());
 app.get("/" , (req,res) => {});
 
 // Encryption
-const saltRounds = 10;
-
 
 app.post("/register", async (req , res) => {
 
@@ -86,7 +84,7 @@ const verifyJWT = (req, res, next) => {
 
 app.get('/isUserAuth' , verifyJWT ,  (req,res) => {
     res.send("Yo, u are authenticated")
-})
+});
 
 app.get("/login", (req,res) => {
     if (req.session.user) {
@@ -95,6 +93,20 @@ app.get("/login", (req,res) => {
         res.send({loggedIn: false})
     }
 })
+
+// @TODO
+// User authenticated endpoint
+
+
+app.post("/message"), verifyJWT , async (req,res) => {
+
+    /*
+    @TODO
+    Add
+     */
+
+
+}
 
 app.post("/login", async (req , res) => {
 
@@ -108,14 +120,14 @@ app.post("/login", async (req , res) => {
                 if (response){
                     try {
                         const id = result[0].id
-                        const token = jwt.sign({id}, process.env.JWTSecret_Key, {
-                            expiresIn: 300,
+                        const token = jwt.sign({id}, process.env.JWTSecret_Key, {             //jwt is created
+                            expiresIn: 300,  // expires in 5 minutes
                         })
                         req.user = result;
                         res.json({
                             auth: true,
                             token: token,
-                            result: result
+                            result: result                               //json that gets sent in the header if res is true
                         });
                     } catch (e) {
                         console.log(e)
@@ -129,41 +141,10 @@ app.post("/login", async (req , res) => {
         })
 }
 )
-
-
-        /*
-
-        if (result){
-            let resultArray = Object.values(JSON.parse(JSON.stringify(result)))
-            for (const elem of resultArray){
-                var hashedPassword =  elem.password
-            }
-            await bcrypt.compare(password, hashedPassword, (err, res) => {
-                if (res === true){
-                    console.log("Access granted")
-
-                    const id = res
-
-                } else{
-                    console.log("Access denied")
-                }
-            });
-
-        } else{
-            res.status(404).json("User not found!");
-        }
-    })
-         */
-
-
-
 })
 
 app.post("/", (req , res) => {
 
-   /*
-   const  name = req.body.name
-   */
 
 })
 

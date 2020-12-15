@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from "react-router-dom";
 import {Button, TextField} from '@material-ui/core';
 
 
@@ -26,7 +24,6 @@ export default class Register extends Component {
         this.setState({
             name: event.target.value
         });
-        console.log(event.target.value)
     }
 
 
@@ -34,7 +31,6 @@ export default class Register extends Component {
         this.setState({
             email: event.target.value
         });
-        console.log(event.target.value)
     }
 
 
@@ -42,7 +38,6 @@ export default class Register extends Component {
         this.setState({
             password: event.target.value
         });
-        console.log(event.target.value)
     }
 
     onSubmit(e){
@@ -54,15 +49,10 @@ export default class Register extends Component {
             password: this.state.password
         }
 
-        console.log(userInfo);
-
         axios.post('http://localhost:3007/register' , userInfo)
             .then(res => console.log(res.data));
 
-        console.log(e.target.value);
-
     }
-
 
     render() {
 
@@ -70,9 +60,9 @@ export default class Register extends Component {
             <div>
 
                 <form className="Information" noValidate autoComplete="off">
-                          <TextField className="diva" id="standard-basic" value={this.state.name} onChange={this.onChangeName}  label="Name" />
-                    <br/> <TextField className="diva" id="standard-basic" value={this.state.email} onChange={this.onChangeEmail} label="Email" />
-                    <br/> <TextField className="diva" id="standard-basic" type="password" value={this.state.password} onChange={this.onChangePassword}  label="Password" />
+                          <TextField className="diva"  value={this.state.name} onChange={this.onChangeName}  label="Name" />
+                    <br/> <TextField className="diva"  value={this.state.email} onChange={this.onChangeEmail} label="Email" />
+                    <br/> <TextField className="diva"  type="password" value={this.state.password} onChange={this.onChangePassword}  label="Password" />
                 </form>
                 <Button className="button" onClick={this.onSubmit} variant="contained" color="primary">
                     Submit
