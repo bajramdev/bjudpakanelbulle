@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from "react-router-dom";
 import {Button, TextField} from '@material-ui/core';
 
 
@@ -44,8 +42,6 @@ export default class Login extends Component {
             password: this.state.password
         }
 
-        console.log(userInfo);
-
         axios.post('http://localhost:3007/login' , userInfo)
             .then((response) => {
                 console.log(response);
@@ -78,8 +74,8 @@ export default class Login extends Component {
             <div>
 
                 <form className="Information" noValidate autoComplete="off">
-                    <br/> <TextField className="diva" id="standard-basic" value={this.state.email} onChange={this.onChangeEmail} label="Email" />
-                    <br/> <TextField className="diva" id="standard-basic" type="password" value={this.state.password} onChange={this.onChangePassword}  label="Password" />
+                    <br/> <TextField className="diva" value={this.state.email} onChange={this.onChangeEmail} label="Email" />
+                    <br/> <TextField className="diva" type="password" value={this.state.password} onChange={this.onChangePassword}  label="Password" />
                 </form>
                 <Button className="button" onClick={this.onSubmit} variant="contained" color="primary">
                     Submit
